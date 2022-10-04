@@ -1,7 +1,6 @@
 ---
 title: "SOK-2008-2022-oppgave3"
 output: pdf_document
-date: "2022-09-26"
 ---
 
 ```{r setup, include=FALSE}
@@ -14,7 +13,7 @@ library(ggrepel)
 
 # Utfordring 3.1
 
-1.
+## 1. Arbeidsledighet blant ungdommer og voksne 
 
 ```{r}
 arbeidsledighet <- ApiData("https://data.ssb.no/api/v0/no/table/11155/",
@@ -27,17 +26,16 @@ arbeidsledighet <- ApiData("https://data.ssb.no/api/v0/no/table/11155/",
 arbeidsledighet <- as.tibble(arbeidsledighet[[2]])
 ```
 
-
-
 ```{r}
 ggplot(arbeidsledighet, aes(x = Alder, y = value, fill = Alder)) +
   geom_col(col = "black") +
+  geom_text(aes(label=value), position=position_dodge(width=0.9), vjust=-0.25) +
   labs(title = "Arbeidsledighet 2020 i prosent",
        x = "",
        y = "Prosent")
 ```
 
-2. 
+## 2. Minstelønn i utvalgte land 
 
 ```{r}
 dsets<-get_datasets()
@@ -89,7 +87,7 @@ complete_minwage_unempl$MinWage <- complete_minwage_unempl$MinWage_0 * 100
 minwage_plot <- ggplot(data=complete_minwage_unempl,aes(x=UnEmpl,y=MinWage, group=COUNTRY, color=COUNTRY)) +
   geom_line(aes(group=COUNTRY), size=1) +
   geom_point(size=2.5)+
-  labs(x = "Name for x-axis" , y ="Name for y-axis")  + 
+  labs(x = "Arbeidsledighet" , y ="Minstelønn % av medianlønn")  + 
   theme(legend.position="none")+
   geom_label_repel(
     data=complete_minwage_unempl %>% group_by(COUNTRY) %>%
